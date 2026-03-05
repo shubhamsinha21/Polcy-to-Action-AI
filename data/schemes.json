@@ -1,0 +1,32 @@
+[
+  {
+    "scheme_name": "PM-KISAN",
+    "benefit": "₹6000 per year income support",
+    "eligibility_rules": [
+      {"field": "occupation", "operator": "==", "value": "Farmer"},
+      {"field": "land_owned", "operator": "==", "value": true},
+      {"field": "income", "operator": "<", "value": 500000}
+    ],
+    "documents": ["Aadhaar", "Land Records", "Bank Account Details"],
+    "apply_process": "Apply via nearest CSC or official PM-KISAN portal"
+  },
+  {
+    "scheme_name": "Kisan Credit Card",
+    "benefit": "Low-interest agricultural loans",
+    "eligibility_rules": [
+      {"field": "occupation", "operator": "==", "value": "Farmer"}
+    ],
+    "documents": ["Aadhaar", "Land Proof", "Bank Account"],
+    "apply_process": "Apply at nearest bank branch"
+  },
+  {
+    "scheme_name": "PM Fasal Bima Yojana",
+    "benefit": "Crop insurance coverage",
+    "eligibility_rules": [
+      {"field": "occupation", "operator": "==", "value": "Farmer"},
+      {"field": "land_owned", "operator": "==", "value": true}
+    ],
+    "documents": ["Land Record", "Crop Details", "Bank Account"],
+    "apply_process": "Apply through agriculture department or insurance provider"
+  }
+]
