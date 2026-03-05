@@ -13,7 +13,7 @@ Government Scheme Eligibility & Decision Engine (Groq + Rule Engine)
 - Whether they qualify
 - What documents are required
 
-### How to apply
+## How to apply
 
 This project converts structured scheme rules into personalized action plans using a dynamic rule engine and LLM-based explanation layer.
 
