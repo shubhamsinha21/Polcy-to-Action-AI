@@ -1,42 +1,33 @@
-🚦 Policy-to-Action AI
+## 🚦 Policy-to-Action AI
+
 Government Scheme Eligibility & Decision Engine (Groq + Rule Engine)
-📌 Problem Statement
 
-Government schemes are often difficult to understand due to:
+## 📌 Problem Statement
 
-Complex eligibility conditions
+- Government schemes are often difficult to understand due to:
+- Complex eligibility conditions
+- Legal language
+- Lack of personalization
+- Scattered documentation
+- Citizens struggle to determine:
+- Whether they qualify
+- What documents are required
 
-Legal language
-
-Lack of personalization
-
-Scattered documentation
-
-Citizens struggle to determine:
-
-Whether they qualify
-
-What documents are required
-
-How to apply
+### How to apply
 
 This project converts structured scheme rules into personalized action plans using a dynamic rule engine and LLM-based explanation layer.
 
-🧠 Solution Overview
+## 🧠 Solution Overview
 
-Policy-to-Action AI is a modular system that:
+- Policy-to-Action AI is a modular system that:
+- Collects structured scheme eligibility rules
+- Accepts user profile input
+- Evaluates eligibility dynamically
+- Generates structured action plans
+- Uses Groq-hosted LLaMA 3 for intelligent explanations
 
-Collects structured scheme eligibility rules
+## 🏗 Architecture
 
-Accepts user profile input
-
-Evaluates eligibility dynamically
-
-Generates structured action plans
-
-Uses Groq-hosted LLaMA 3 for intelligent explanations
-
-🏗 Architecture
 User Input
      ↓
 Rule Engine (Dynamic Evaluation)
@@ -46,31 +37,26 @@ Eligible Schemes
 Groq LLM Explanation Layer
      ↓
 Structured Action Plan Output
-⚙️ Tech Stack
 
-Python
+## ⚙️ Tech Stack
 
-Streamlit
+- Python
+- Streamlit
+- Custom Rule Engine
+- Groq API (LLaMA 3)
+- JSON-based scheme database
 
-Custom Rule Engine
+## 🚀 Features
 
-Groq API (LLaMA 3)
+- Dynamic eligibility rule evaluation
+- Confidence scoring
+- Modular architecture
+- LLM-powered explanation layer
+- Easily extendable scheme database
 
-JSON-based scheme database
+## 📂 Project Structure
 
-🚀 Features
-
-Dynamic eligibility rule evaluation
-
-Confidence scoring
-
-Modular architecture
-
-LLM-powered explanation layer
-
-Easily extendable scheme database
-
-📂 Project Structure
+```
 policy-to-action-ai/
 │
 ├── app/
@@ -84,7 +70,12 @@ policy-to-action-ai/
 ├── requirements.txt
 ├── .env.example
 └── README.md
-▶️ How to Run
+```
+
+
+### ▶️ How to Run
+
+```
 git clone <your-repo-url>
 cd policy-to-action-ai
 pip install -r requirements.txt
@@ -96,24 +87,26 @@ GROQ_API_KEY=your_key_here
 Run:
 
 streamlit run app/main.py
-🧪 Example Use Case
+```
+
+## 🧪 Example Use Case
 
 Input:
 
-Occupation: Farmer
+- Occupation: Farmer
 
-Land Owned: Yes
+- Land Owned: Yes
 
-Income: ₹200000
+- Income: ₹200000
 
 Output:
 
-Eligible schemes
+- Eligible schemes
 
-Benefit details
+- Benefit details
 
-Required documents
+- Required documents
 
-Application steps
+- Application steps
 
-AI-generated explanation
+- AI-generated explanation
