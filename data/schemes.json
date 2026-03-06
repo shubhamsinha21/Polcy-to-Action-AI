@@ -28,5 +28,14 @@
     ],
     "documents": ["Land Record", "Crop Details", "Bank Account"],
     "apply_process": "Apply through agriculture department or insurance provider"
-  }
+  },
+  {
+  "scheme_name": "Bihar Diesel Subsidy Scheme",
+  "state": "Bihar",
+  "benefit": "Subsidy on diesel for irrigation",
+  "eligibility_rules": [
+    {"field": "occupation", "operator": "==", "value": "Farmer"},
+    {"field": "state", "operator": "==", "value": "Bihar"}
+  ]
+}
 ]
