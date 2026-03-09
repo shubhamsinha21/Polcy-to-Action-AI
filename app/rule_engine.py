@@ -1,4 +1,5 @@
 def evaluate_rule(user_data, rule):
+
     field = rule["field"]
     operator = rule["operator"]
     value = rule["value"]
@@ -18,18 +19,20 @@ def evaluate_rule(user_data, rule):
 
 
 def check_eligibility(user_data, scheme):
-    rules = scheme.get("eligibility_rules", [])
-    
-    if not rules:
-        return False, 0.0
 
-    results = [evaluate_rule(user_data, rule) for rule in rules]
+    rules = scheme.get("eligibility_rules", [])
+
+    results = []
+
+    for rule in rules:
+        result = evaluate_rule(user_data, rule)
+        results.append(result)
 
     match_count = sum(results)
     total_rules = len(rules)
 
-    confidence_score = match_count / total_rules
+    confidence = match_count / total_rules if total_rules else 0
 
     is_eligible = match_count == total_rules
 
-    return is_eligible, confidence_score
+    return is_eligible, confidence, results

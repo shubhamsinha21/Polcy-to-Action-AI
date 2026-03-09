@@ -1,61 +1,83 @@
 import streamlit as st
-import json
 from rule_engine import check_eligibility
 from llm_explainer import generate_explanation
+from data_loader import load_schemes
 
-# Load scheme data
-with open("data/schemes.json", "r") as f:
-    schemes = json.load(f)
+schemes = load_schemes()
 
-st.set_page_config(page_title="Policy-to-Action AI", layout="centered")
+st.set_page_config(page_title="Policy-to-Action AI")
 
 st.title("🚦 Policy-to-Action AI")
-st.write("Personalized Government Scheme Eligibility Engine")
+st.write("AI-powered Government Scheme Eligibility Checker")
 
 st.divider()
 
-# User Input Section
 st.subheader("Enter Your Details")
 
-occupation = st.selectbox("Occupation", ["Farmer", "Student", "Business"])
+name = st.text_input("Name")
+
+occupation = st.selectbox(
+    "Occupation",
+    ["Farmer", "Student", "Business"]
+)
+
+state = st.selectbox(
+    "State",
+    ["Bihar", "Uttar Pradesh", "Delhi", "Other"]
+)
+
 land_owned = st.checkbox("Do you own agricultural land?")
-income = st.number_input("Annual Income (₹)", min_value=0, step=10000)
+
+income = st.number_input(
+    "Annual Income",
+    min_value=0
+)
 
 user_data = {
+    "name": name,
     "occupation": occupation,
+    "state": state,
     "land_owned": land_owned,
     "income": income
 }
 
 st.divider()
 
-if st.button("Check Eligibility"):
+if st.button("Check Eligible Schemes"):
 
-    st.subheader("Eligibility Results")
+    st.subheader("Results")
 
-    found_scheme = False
+    found = False
 
     for scheme in schemes:
-        eligible, confidence = check_eligibility(user_data, scheme)
+
+        if "states" in scheme:
+            if "All" not in scheme["states"] and state not in scheme["states"]:
+                continue
+
+        eligible, confidence, rule_results = check_eligibility(user_data, scheme)
 
         if eligible:
-            found_scheme = True
 
-            st.success(f"✅ Eligible for {scheme['scheme_name']}")
-            st.write(f"**Benefit:** {scheme['benefit']}")
-            st.write(f"**Match Confidence:** {confidence*100:.0f}%")
+            found = True
+
+            st.success(f"Eligible for {scheme['scheme_name']}")
+
+            st.write("Benefit:", scheme["benefit"])
+            st.write("Confidence:", f"{confidence*100:.0f}%")
+
+            st.write("Documents Required:")
+            for doc in scheme["documents"]:
+                st.write("-", doc)
+
+            st.write("Application Process:")
+            st.write(scheme["apply_process"])
 
             explanation = generate_explanation(user_data, scheme)
+
             st.info(explanation)
-
-            st.write("### Required Documents")
-            for doc in scheme["documents"]:
-                st.write(f"- {doc}")
-
-            st.write("### How to Apply")
-            st.write(scheme["apply_process"])
 
             st.divider()
 
-    if not found_scheme:
-        st.error("❌ No matching schemes found based on provided details.")
+    if not found:
+        st.error("No schemes matched your profile.")
