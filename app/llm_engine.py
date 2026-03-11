@@ -8,40 +8,53 @@ API_KEY = os.getenv("GROQ_API_KEY")
 
 URL = "https://api.groq.com/openai/v1/chat/completions"
 
-
 def ask_llm(prompt):
 
-    response = requests.post(
-        URL,
-        headers={
-            "Authorization": f"Bearer {API_KEY}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "model": "llama3-8b-8192",
-            "messages": [{"role": "user", "content": prompt}],
-            "temperature": 0.3
-        }
-    )
+    if not API_KEY:
+        return "ERROR: GROQ_API_KEY not found."
 
-    data = response.json()
+    try:
+        response = requests.post(
+            URL,
+            headers={
+                "Authorization": f"Bearer {API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "llama-3.1-8b-instant",
+                "messages": [
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.3
+            }
+        )
 
-    if "choices" in data:
-        return data["choices"][0]["message"]["content"]
+        data = response.json()
 
-    return f"Groq Error: {data}"
+        if "choices" in data:
+            return data["choices"][0]["message"]["content"]
 
+        return f"Groq API Error: {data}"
+
+    except Exception as e:
+        return f"Request failed: {str(e)}"
 
 def explain_eligibility(user, scheme):
 
     prompt = f"""
-User profile:
+You are a government policy advisor.
+
+User Profile:
 {user}
 
 Scheme:
 {scheme['scheme_name']}
 
-Explain clearly why the user qualifies.
+Benefit:
+{scheme['benefit']}
+
+Explain clearly why the user qualifies for this scheme.
+Keep the explanation simple.
 """
 
     return ask_llm(prompt)
