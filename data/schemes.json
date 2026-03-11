@@ -1,35 +1,35 @@
 [
   {
     "scheme_name": "PM-KISAN",
-    "states": ["All"],
+    "occupation": "Farmer",
+    "income_limit": 600000,
+    "state": "All",
+    "land_required": true,
     "benefit": "₹6000 annual support to farmers",
-    "eligibility_rules": [
-      {"field": "occupation", "operator": "==", "value": "Farmer"},
-      {"field": "land_owned", "operator": "==", "value": true},
-      {"field": "income", "operator": "<", "value": 500000}
-    ],
     "documents": ["Aadhaar", "Land Records", "Bank Account"],
-    "apply_process": "Apply via PM-KISAN portal or CSC"
+    "deadline": "31 July",
+    "apply_link": "https://pmkisan.gov.in"
   },
   {
     "scheme_name": "Kisan Credit Card",
-    "states": ["All"],
+    "occupation": "Farmer",
+    "income_limit": 800000,
+    "state": "All",
+    "land_required": true,
     "benefit": "Low interest agricultural loans",
-    "eligibility_rules": [
-      {"field": "occupation", "operator": "==", "value": "Farmer"}
-    ],
     "documents": ["Aadhaar", "Land Proof"],
-    "apply_process": "Apply through nearest bank"
+    "deadline": "Rolling",
+    "apply_link": "https://pmkisan.gov.in"
   },
   {
     "scheme_name": "Mukhyamantri Krishi Ashirwad Yojana",
-    "states": ["Bihar"],
+    "occupation": "Farmer",
+    "income_limit": 500000,
+    "state": "Bihar",
+    "land_required": true,
     "benefit": "State-level financial assistance",
-    "eligibility_rules": [
-      {"field": "occupation", "operator": "==", "value": "Farmer"},
-      {"field": "land_owned", "operator": "==", "value": true}
-    ],
     "documents": ["Land Documents", "Aadhaar"],
-    "apply_process": "Apply via Bihar agriculture portal"
+    "deadline": "30 September",
+    "apply_link": "https://state.bihar.gov.in"
   }
 ]

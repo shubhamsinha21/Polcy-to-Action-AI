@@ -1,38 +1,31 @@
-def evaluate_rule(user_data, rule):
+import json
 
-    field = rule["field"]
-    operator = rule["operator"]
-    value = rule["value"]
+def load_schemes():
 
-    user_value = user_data.get(field)
-
-    if operator == "==":
-        return user_value == value
-
-    if operator == "<":
-        return user_value < value
-
-    if operator == ">":
-        return user_value > value
-
-    return False
+    with open("data/schemes.json") as f:
+        return json.load(f)
 
 
-def check_eligibility(user_data, scheme):
+def check_eligibility(user):
 
-    rules = scheme["eligibility_rules"]
+    schemes = load_schemes()
 
-    results = []
+    eligible = []
 
-    for rule in rules:
-        result = evaluate_rule(user_data, rule)
-        results.append(result)
+    for scheme in schemes:
 
-    matched = sum(results)
-    total = len(rules)
+        if user["occupation"] != scheme["occupation"]:
+            continue
 
-    confidence = matched / total
+        if user["income"] > scheme["income_limit"]:
+            continue
 
-    eligible = matched == total
+        if scheme["state"] != "All" and user["state"] != scheme["state"]:
+            continue
 
-    return eligible, confidence, results
+        if scheme["land_required"] and not user["land_owned"]:
+            continue
+
+        eligible.append(scheme)
+
+    return eligible

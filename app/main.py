@@ -1,96 +1,66 @@
 import streamlit as st
-
-from data_loader import load_schemes
-from rule_engine import check_eligibility
-from llm_engine import explain_eligibility, parse_user_query
-from recommender import recommend_schemes
-
-schemes = load_schemes()
+from rule_engine import check_eligibility, load_schemes
+from ranking_engine import rank_schemes
+from simulator import simulate_income_change
+from llm_engine import explain_eligibility
 
 st.title("🚦 Policy-to-Action AI")
-st.write("AI-powered Government Scheme Eligibility Checker")
+st.subheader("AI-powered Government Scheme Advisor")
 
-mode = st.radio(
-    "Choose Input Mode",
-    ["Form Input", "Natural Language"]
-)
+occupation = st.selectbox("Occupation", ["Farmer"])
+state = st.selectbox("State", ["Bihar", "UP", "MP"])
+income = st.number_input("Annual Income", value=200000)
+land = st.checkbox("Do you own agricultural land?")
 
-if mode == "Natural Language":
+user = {
+    "occupation": occupation,
+    "state": state,
+    "income": income,
+    "land_owned": land
+}
 
-    query = st.text_input(
-        "Describe your situation",
-        "I am a farmer from Bihar with income 2 lakh"
-    )
+if st.button("Check Schemes"):
 
-    if st.button("Analyze"):
+    schemes = check_eligibility(user)
 
-        result = parse_user_query(query)
-        st.write("Parsed profile:")
-        st.write(result)
+    if not schemes:
+        st.warning("No schemes found")
+    else:
 
-else:
+        ranked = rank_schemes(user, schemes)
 
-    st.subheader("Enter Your Details")
+        st.header("Top Schemes For You")
 
-    occupation = st.selectbox(
-        "Occupation",
-        ["Farmer", "Student", "Business"]
-    )
+        for scheme, score in ranked:
 
-    state = st.selectbox(
-        "State",
-        ["Bihar", "UP", "Delhi"]
-    )
+            st.subheader(f"{scheme['scheme_name']} (Score: {score})")
+            st.write("Benefit:", scheme["benefit"])
+            st.write("Deadline:", scheme["deadline"])
+            st.write("Apply:", scheme["apply_link"])
 
-    income = st.number_input(
-        "Income",
-        min_value=0
-    )
+            st.write("Documents:", ", ".join(scheme["documents"]))
 
-    land_owned = st.checkbox("Own agricultural land")
+            explanation = explain_eligibility(user, scheme)
 
-    user_data = {
-        "occupation": occupation,
-        "state": state,
-        "income": income,
-        "land_owned": land_owned
-    }
+            st.write("AI Explanation:")
+            st.write(explanation)
 
-    if st.button("Check Schemes"):
+            st.divider()
 
-        found = False
+st.header("Policy Impact Simulator")
 
-        for scheme in schemes:
+new_income = st.number_input("Simulate income change", value=500000)
 
-            if "All" not in scheme["states"] and state not in scheme["states"]:
-                continue
+if st.button("Run Simulation"):
 
-            eligible, confidence, rule_results = check_eligibility(user_data, scheme)
+    schemes = load_schemes()
 
-            if eligible:
+    lost, retained = simulate_income_change(user, schemes, new_income)
 
-                found = True
+    st.subheader("If income becomes:", new_income)
 
-                st.success(f"Eligible for {scheme['scheme_name']}")
+    st.write("❌ Schemes you may lose:")
+    st.write(lost)
 
-                st.write("Benefit:", scheme["benefit"])
-                st.write("Confidence:", confidence)
-
-                st.write("Documents:")
-                for doc in scheme["documents"]:
-                    st.write("-", doc)
-
-                explanation = explain_eligibility(user_data, scheme)
-
-                st.info(explanation)
-
-        if not found:
-
-            st.warning("No schemes matched")
-
-            rec = recommend_schemes(user_data, schemes)
-
-            if rec:
-                st.write("You may explore:")
-                for r in rec:
-                    st.write("-", r)
+    st.write("✅ Schemes you retain:")
+    st.write(retained)
