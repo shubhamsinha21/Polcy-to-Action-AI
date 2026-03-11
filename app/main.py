@@ -6,6 +6,7 @@ from simulator import simulate_income_change
 from llm_engine import explain_eligibility
 from pdf_extractor import extract_text_from_pdf, extract_scheme_from_policy, save_scheme_to_db
 from web_scraper import discover_new_schemes
+from chat_engine import run_policy_chat
 
 
 # ==========================
@@ -207,3 +208,32 @@ if st.button("Run AI Policy Discovery"):
     else:
 
         st.warning("No new schemes discovered.")
+        
+
+# ==========================
+# AI POLICY COPILOT
+# ==========================
+
+st.header("🤖 AI Policy Copilot")
+
+st.write("Ask questions about government schemes.")
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+user_message = st.text_input("Ask something:")
+
+if st.button("Send"):
+
+    response = run_policy_chat(user_message)
+
+    st.session_state.chat_history.append(("You", user_message))
+    st.session_state.chat_history.append(("AI", response))
+
+for role, msg in st.session_state.chat_history:
+
+    if role == "You":
+        st.markdown(f"**You:** {msg}")
+
+    else:
+        st.markdown(f"**AI:** {msg}")
