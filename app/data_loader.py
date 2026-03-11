@@ -1,6 +1,5 @@
 import json
 
-def load_schemes(filepath="data/schemes.json"):
-    with open(filepath, "r") as f:
-        schemes = json.load(f)
-    return schemes
+def load_schemes(path="data/schemes.json"):
+    with open(path, "r") as f:
+        return json.load(f)

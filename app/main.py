@@ -1,83 +1,96 @@
 import streamlit as st
-from rule_engine import check_eligibility
-from llm_explainer import generate_explanation
+
 from data_loader import load_schemes
+from rule_engine import check_eligibility
+from llm_engine import explain_eligibility, parse_user_query
+from recommender import recommend_schemes
 
 schemes = load_schemes()
-
-st.set_page_config(page_title="Policy-to-Action AI")
 
 st.title("🚦 Policy-to-Action AI")
 st.write("AI-powered Government Scheme Eligibility Checker")
 
-st.divider()
-
-st.subheader("Enter Your Details")
-
-name = st.text_input("Name")
-
-occupation = st.selectbox(
-    "Occupation",
-    ["Farmer", "Student", "Business"]
+mode = st.radio(
+    "Choose Input Mode",
+    ["Form Input", "Natural Language"]
 )
 
-state = st.selectbox(
-    "State",
-    ["Bihar", "Uttar Pradesh", "Delhi", "Other"]
-)
+if mode == "Natural Language":
 
-land_owned = st.checkbox("Do you own agricultural land?")
+    query = st.text_input(
+        "Describe your situation",
+        "I am a farmer from Bihar with income 2 lakh"
+    )
 
-income = st.number_input(
-    "Annual Income",
-    min_value=0
-)
+    if st.button("Analyze"):
 
-user_data = {
-    "name": name,
-    "occupation": occupation,
-    "state": state,
-    "land_owned": land_owned,
-    "income": income
-}
+        result = parse_user_query(query)
+        st.write("Parsed profile:")
+        st.write(result)
 
-st.divider()
+else:
 
-if st.button("Check Eligible Schemes"):
+    st.subheader("Enter Your Details")
 
-    st.subheader("Results")
+    occupation = st.selectbox(
+        "Occupation",
+        ["Farmer", "Student", "Business"]
+    )
 
-    found = False
+    state = st.selectbox(
+        "State",
+        ["Bihar", "UP", "Delhi"]
+    )
 
-    for scheme in schemes:
+    income = st.number_input(
+        "Income",
+        min_value=0
+    )
 
-        if "states" in scheme:
+    land_owned = st.checkbox("Own agricultural land")
+
+    user_data = {
+        "occupation": occupation,
+        "state": state,
+        "income": income,
+        "land_owned": land_owned
+    }
+
+    if st.button("Check Schemes"):
+
+        found = False
+
+        for scheme in schemes:
+
             if "All" not in scheme["states"] and state not in scheme["states"]:
                 continue
 
-        eligible, confidence, rule_results = check_eligibility(user_data, scheme)
+            eligible, confidence, rule_results = check_eligibility(user_data, scheme)
 
-        if eligible:
+            if eligible:
 
-            found = True
+                found = True
 
-            st.success(f"Eligible for {scheme['scheme_name']}")
+                st.success(f"Eligible for {scheme['scheme_name']}")
 
-            st.write("Benefit:", scheme["benefit"])
-            st.write("Confidence:", f"{confidence*100:.0f}%")
+                st.write("Benefit:", scheme["benefit"])
+                st.write("Confidence:", confidence)
 
-            st.write("Documents Required:")
-            for doc in scheme["documents"]:
-                st.write("-", doc)
+                st.write("Documents:")
+                for doc in scheme["documents"]:
+                    st.write("-", doc)
 
-            st.write("Application Process:")
-            st.write(scheme["apply_process"])
+                explanation = explain_eligibility(user_data, scheme)
 
-            explanation = generate_explanation(user_data, scheme)
+                st.info(explanation)
 
-            st.info(explanation)
+        if not found:
 
-            st.divider()
+            st.warning("No schemes matched")
 
-    if not found:
-        st.error("No schemes matched your profile.")
+            rec = recommend_schemes(user_data, schemes)
+
+            if rec:
+                st.write("You may explore:")
+                for r in rec:
+                    st.write("-", r)

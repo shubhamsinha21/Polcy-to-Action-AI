@@ -9,22 +9,26 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 URL = "https://api.groq.com/openai/v1/chat/completions"
 
 
-def generate_explanation(user_data, scheme):
-
-    if not GROQ_API_KEY:
-        return "No Groq API key configured."
+def parse_policy(text):
 
     prompt = f"""
-User Profile:
-{user_data}
+Convert the following government policy text into structured JSON.
 
-Government Scheme:
-{scheme['scheme_name']}
+Format:
 
-Benefit:
-{scheme['benefit']}
+{{
+  "scheme_name": "",
+  "states": [],
+  "benefit": "",
+  "eligibility_rules": [
+    {{"field":"","operator":"","value":""}}
+  ],
+  "documents": [],
+  "apply_process": ""
+}}
 
-Explain clearly why the user qualifies.
+Policy Text:
+{text}
 """
 
     response = requests.post(
@@ -41,7 +45,4 @@ Explain clearly why the user qualifies.
         }
     )
 
-    try:
-        return response.json()["choices"][0]["message"]["content"]
-    except:
-        return "LLM explanation unavailable."
+    return response.json()["choices"][0]["message"]["content"]

@@ -2,14 +2,14 @@
   {
     "scheme_name": "PM-KISAN",
     "states": ["All"],
-    "benefit": "₹6000 per year income support",
+    "benefit": "₹6000 annual support to farmers",
     "eligibility_rules": [
       {"field": "occupation", "operator": "==", "value": "Farmer"},
       {"field": "land_owned", "operator": "==", "value": true},
       {"field": "income", "operator": "<", "value": 500000}
     ],
     "documents": ["Aadhaar", "Land Records", "Bank Account"],
-    "apply_process": "Apply via CSC or official PM-KISAN portal"
+    "apply_process": "Apply via PM-KISAN portal or CSC"
   },
   {
     "scheme_name": "Kisan Credit Card",
@@ -19,17 +19,17 @@
       {"field": "occupation", "operator": "==", "value": "Farmer"}
     ],
     "documents": ["Aadhaar", "Land Proof"],
-    "apply_process": "Apply through bank"
+    "apply_process": "Apply through nearest bank"
   },
   {
     "scheme_name": "Mukhyamantri Krishi Ashirwad Yojana",
     "states": ["Bihar"],
-    "benefit": "Financial support to farmers",
+    "benefit": "State-level financial assistance",
     "eligibility_rules": [
       {"field": "occupation", "operator": "==", "value": "Farmer"},
       {"field": "land_owned", "operator": "==", "value": true}
     ],
     "documents": ["Land Documents", "Aadhaar"],
-    "apply_process": "Apply through state agriculture portal"
+    "apply_process": "Apply via Bihar agriculture portal"
   }
 ]
