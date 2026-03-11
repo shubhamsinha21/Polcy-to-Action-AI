@@ -2,3 +2,5 @@ streamlit
 requests
 python-dotenv
 pdfplumber
+beautifulsoup4
+lxml
