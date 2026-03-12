@@ -1,81 +1,49 @@
 import requests
 from bs4 import BeautifulSoup
-import json
-import urllib3
+import warnings
 
-from pdf_extractor import extract_scheme_from_policy, save_scheme_to_db
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+warnings.filterwarnings("ignore")
 
 
-def fetch_policy_pages():
+def discover_new_schemes():
 
     urls = [
-        "https://pmkisan.gov.in/",
-        "https://dbtagriculture.bihar.gov.in/",
-        "https://www.india.gov.in/"
+        "https://www.india.gov.in/my-government/schemes",
+        "https://www.nabard.org",
     ]
 
-    pages = []
+    discovered = []
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    }
 
     for url in urls:
 
         try:
 
-            response = requests.get(url, timeout=10, verify=False)
+            response = requests.get(
+                url,
+                headers=headers,
+                timeout=10
+            )
 
-            soup = BeautifulSoup(response.text, "lxml")
+            if response.status_code != 200:
+                continue
 
-            text = soup.get_text()
+            soup = BeautifulSoup(response.text, "html.parser")
 
-            pages.append(text[:4000])
+            links = soup.find_all("a")
 
-        except Exception as e:
+            for link in links:
 
-            print("Scraping error:", e)
+                text = link.text.strip()
 
-    return pages
+                if len(text) > 10 and "scheme" in text.lower():
 
+                    discovered.append(text)
 
-def create_basic_scheme(text):
+        except Exception:
+            continue
 
-    return {
-        "scheme_name": "Discovered Government Scheme",
-        "occupation": "Farmer",
-        "income_limit": 500000,
-        "state": "All",
-        "land_required": False,
-        "benefit": text[:120],
-        "documents": ["Aadhaar"],
-        "deadline": "Rolling",
-        "apply_link": "https://india.gov.in"
-    }
-
-
-def discover_new_schemes():
-
-    pages = fetch_policy_pages()
-
-    added = []
-
-    for page in pages:
-
-        try:
-
-            scheme_json = extract_scheme_from_policy(page)
-
-            result = save_scheme_to_db(scheme_json)
-
-            if result is True:
-
-                added.append(scheme_json)
-
-        except:
-
-            basic_scheme = create_basic_scheme(page)
-
-            save_scheme_to_db(json.dumps(basic_scheme))
-
-            added.append(basic_scheme)
-
-    return added
+    return list(set(discovered))

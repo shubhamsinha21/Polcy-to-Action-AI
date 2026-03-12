@@ -1,12 +1,13 @@
 import streamlit as st
 
-from app.rule_engine import check_eligibility, load_schemes
-from app.ranking_engine import rank_schemes
-from app.simulator import simulate_income_change
-from app.llm_engine import explain_eligibility
-from app.pdf_extractor import extract_text_from_pdf, extract_scheme_from_policy, save_scheme_to_db
-from app.web_scraper import discover_new_schemes
-from app.chat_engine import run_policy_chat
+from rule_engine import check_eligibility, load_schemes
+from ranking_engine import rank_schemes
+from simulator import simulate_income_change
+from llm_engine import explain_eligibility
+from pdf_extractor import extract_text_from_pdf, extract_scheme_from_policy, save_scheme_to_db
+from web_scraper import discover_new_schemes
+from chat_engine import run_policy_chat
+from vector_search import search_schemes
 
 
 # ==========================
@@ -233,7 +234,20 @@ if st.button("Send"):
 for role, msg in st.session_state.chat_history:
 
     if role == "You":
-        st.markdown(f"**You:** {msg}")
-
+        st.chat_message("user").write(msg)
     else:
-        st.markdown(f"**AI:** {msg}")
+        st.chat_message("assistant").write(msg)
+        
+        
+st.header("🔎 Search Government Schemes")
+
+query = st.text_input("Search schemes")
+
+if st.button("Search"):
+
+    results = search_schemes(query)
+
+    for r in results:
+
+        st.subheader(r["scheme_name"])
+        st.write(r["benefit"])

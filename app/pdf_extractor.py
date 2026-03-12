@@ -1,6 +1,28 @@
 import pdfplumber
 import json
 from llm_engine import ask_llm
+import fitz
+import warnings
+
+warnings.filterwarnings("ignore")
+
+
+def extract_text_from_pdf(uploaded_file):
+
+    text = ""
+
+    try:
+
+        pdf = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+
+        for page in pdf:
+
+            text += page.get_text()
+
+    except Exception:
+        pass
+
+    return text
 
 
 def extract_text_from_pdf(file):

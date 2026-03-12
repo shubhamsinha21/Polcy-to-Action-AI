@@ -1,9 +1,9 @@
 import json
 
-from app.llm_engine import ask_llm
-from app.rule_engine import check_eligibility
-from app.ranking_engine import rank_schemes
-from app.vector_store import search_schemes
+from llm_engine import ask_llm
+from rule_engine import check_eligibility
+from ranking_engine import rank_schemes
+from vector_store import search_schemes
 
 
 def extract_user_profile(message):
