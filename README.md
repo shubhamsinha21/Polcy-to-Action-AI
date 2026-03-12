@@ -101,6 +101,7 @@ Data | JSON Scheme Database |
 
 # 📂 Project Structure
 
+```
 yojanaai
 │
 ├── app
@@ -116,37 +117,35 @@ yojanaai
 │
 ├── requirements.txt
 └── README.md
-
+```
 
 ---
 
 # ⚙️ Installation
 
-Clone the repository:
+### Clone the repository:
 
 git clone https://github.com/yourusername/yojanaai.git
 
 cd yojanaai
 
 
-Create virtual environment:
-
+### Create virtual environment:
 
 python -m venv venv
 source venv/bin/activate
 
 
-Install dependencies:
+### Install dependencies:
 
 
 pip install -r requirements.txt
 
 
-Add your Groq API key:
+### Add your Groq API key:
 
 
 GROQ_API_KEY=your_api_key_here
-
 
 ---
 
