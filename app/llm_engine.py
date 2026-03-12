@@ -29,7 +29,8 @@ def ask_llm(prompt):
                         "content": prompt
                     }
                 ],
-                "temperature": 0.3
+                "temperature": 0.3,
+                "max_tokens": 300
             },
             timeout=30
         )
@@ -43,6 +44,11 @@ def ask_llm(prompt):
 
     except Exception as e:
         return f"Request failed: {str(e)}"
+
+
+# ⭐ NEW FUNCTION (FOR COPILOT)
+def call_llm(prompt):
+    return ask_llm(prompt)
 
 
 def explain_eligibility(user, scheme):

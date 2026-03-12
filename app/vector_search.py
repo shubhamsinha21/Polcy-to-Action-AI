@@ -52,4 +52,4 @@ def search_schemes(query, top_k=3):
 
         results.append(schemes[i])
 
-    return results
+    return results[:2]

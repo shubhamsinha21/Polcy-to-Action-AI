@@ -1,76 +1,64 @@
-import json
-
-from llm_engine import ask_llm
-from rule_engine import check_eligibility
-from ranking_engine import rank_schemes
-from vector_store import search_schemes
+from vector_search import search_schemes
+from llm_engine import call_llm
 
 
-def extract_user_profile(message):
+def run_policy_chat(user_query):
 
-    prompt = f"""
-Extract the user profile from this message.
+    query = user_query.lower()
 
-Return JSON in this format:
+    # keywords that indicate scheme related questions
+    scheme_keywords = [
+        "scheme",
+        "yojana",
+        "kisan",
+        "loan",
+        "farmer",
+        "subsidy",
+        "pm",
+        "credit card"
+    ]
 
-{{
-"occupation": "",
-"state": "",
-"income": number,
-"land_owned": true/false
-}}
+    # check intent
+    if any(word in query for word in scheme_keywords):
 
-Message:
-{message}
-"""
-
-    response = ask_llm(prompt)
-
-    try:
-
-        profile = json.loads(response)
-
-        return profile
-
-    except:
-
-        return None
-
-
-def run_policy_chat(message):
-
-    # Try to extract user profile
-    user = extract_user_profile(message)
-
-    # If profile found → run eligibility engine
-    if user:
-
-        schemes = check_eligibility(user)
+        schemes = search_schemes(query)
 
         if not schemes:
+            return "No relevant schemes found."
 
-            return "No schemes found for your profile."
+        context = ""
 
-        ranked = rank_schemes(user, schemes)
+        for s in schemes:
+            context += f"""
+Scheme: {s['scheme_name']}
+Benefit: {s['benefit']}
+"""
 
-        result = "Here are schemes based on your profile:\n\n"
+        prompt = f"""
+You are a government policy assistant.
 
-        for scheme, score in ranked[:3]:
+Use the schemes below to answer the question.
 
-            result += f"{scheme['scheme_name']}\n"
-            result += f"Benefit: {scheme['benefit']}\n\n"
+User Question:
+{user_query}
 
-        return result
+Schemes:
+{context}
 
-    # Otherwise use vector search (RAG)
+Explain clearly and simply.
+"""
 
-    results = search_schemes(message)
+        return call_llm(prompt)
 
-    result = "Here are relevant schemes:\n\n"
+    else:
 
-    for s in results:
+        # general knowledge question
+        prompt = f"""
+You are a helpful policy assistant.
 
-        result += f"{s['scheme_name']}\n"
-        result += f"Benefit: {s['benefit']}\n\n"
+Answer this question clearly:
 
-    return result
+{user_query}
+"""
+
+        return call_llm(prompt)
