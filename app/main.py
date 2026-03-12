@@ -1,12 +1,12 @@
 import streamlit as st
 
-from rule_engine import check_eligibility, load_schemes
-from ranking_engine import rank_schemes
-from simulator import simulate_income_change
-from llm_engine import explain_eligibility
-from pdf_extractor import extract_text_from_pdf, extract_scheme_from_policy, save_scheme_to_db
-from web_scraper import discover_new_schemes
-from chat_engine import run_policy_chat
+from app.rule_engine import check_eligibility, load_schemes
+from app.ranking_engine import rank_schemes
+from app.simulator import simulate_income_change
+from app.llm_engine import explain_eligibility
+from app.pdf_extractor import extract_text_from_pdf, extract_scheme_from_policy, save_scheme_to_db
+from app.web_scraper import discover_new_schemes
+from app.chat_engine import run_policy_chat
 
 
 # ==========================

@@ -1,9 +1,9 @@
 import json
-from llm_engine import ask_llm
-from rule_engine import check_eligibility
-from ranking_engine import rank_schemes
-from vector_store import search_schemes
-from vector_store import search_schemes
+
+from app.llm_engine import ask_llm
+from app.rule_engine import check_eligibility
+from app.ranking_engine import rank_schemes
+from app.vector_store import search_schemes
 
 
 def extract_user_profile(message):
@@ -27,20 +27,29 @@ Message:
     response = ask_llm(prompt)
 
     try:
-        profile = json.loads(response)
-        return profile
-    except:
-        return None
 
+        profile = json.loads(response)
+
+        return profile
+
+    except:
+
+        return None
 
 
 def run_policy_chat(message):
 
+    # Try to extract user profile
     user = extract_user_profile(message)
 
+    # If profile found → run eligibility engine
     if user:
 
         schemes = check_eligibility(user)
+
+        if not schemes:
+
+            return "No schemes found for your profile."
 
         ranked = rank_schemes(user, schemes)
 
@@ -53,15 +62,15 @@ def run_policy_chat(message):
 
         return result
 
-    else:
+    # Otherwise use vector search (RAG)
 
-        results = search_schemes(message)
+    results = search_schemes(message)
 
-        result = "Here are relevant schemes:\n\n"
+    result = "Here are relevant schemes:\n\n"
 
-        for s in results:
+    for s in results:
 
-            result += f"{s['scheme_name']}\n"
-            result += f"Benefit: {s['benefit']}\n\n"
+        result += f"{s['scheme_name']}\n"
+        result += f"Benefit: {s['benefit']}\n\n"
 
-        return result
+    return result

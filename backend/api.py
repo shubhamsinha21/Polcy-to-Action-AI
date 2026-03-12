@@ -5,6 +5,8 @@ from app.rule_engine import check_eligibility
 from app.ranking_engine import rank_schemes
 from app.chat_engine import run_policy_chat
 from app.vector_store import search_schemes
+from app.policy_forecaster import forecast_income_policy
+
 
 app = FastAPI(title="Policy-to-Action AI API")
 
@@ -52,3 +54,14 @@ def search(query: str):
     results = search_schemes(query)
 
     return {"results": results}
+
+
+@app.get("/policy-impact")
+def policy_impact(new_income_limit: int):
+
+    schemes = forecast_income_policy(new_income_limit)
+
+    return {
+        "affected_schemes": schemes,
+        "count": len(schemes)
+    }
