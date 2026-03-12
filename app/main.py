@@ -78,7 +78,7 @@ if page == "🏠 Home":
 
     st.markdown(
         """
-AI-powered Government Scheme Advisor.**
+**AI-powered Government Scheme Advisor.**
 
 ### Features
 
