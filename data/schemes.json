@@ -5,7 +5,7 @@
     "income_limit": 600000,
     "state": "All",
     "land_required": true,
-    "benefit": "₹6000 annual support to farmers",
+    "benefit": "₹6000 annual income support to small and marginal farmers",
     "documents": ["Aadhaar", "Land Records", "Bank Account"],
     "deadline": "31 July",
     "apply_link": "https://pmkisan.gov.in"
@@ -16,8 +16,8 @@
     "income_limit": 800000,
     "state": "All",
     "land_required": true,
-    "benefit": "Low interest agricultural loans",
-    "documents": ["Aadhaar", "Land Proof"],
+    "benefit": "Low interest agricultural loans for farmers",
+    "documents": ["Aadhaar", "Land Proof", "Bank Passbook"],
     "deadline": "Rolling",
     "apply_link": "https://pmkisan.gov.in"
   },
@@ -27,9 +27,134 @@
     "income_limit": 500000,
     "state": "Bihar",
     "land_required": true,
-    "benefit": "State-level financial assistance",
+    "benefit": "Financial assistance to farmers for crop production",
     "documents": ["Land Documents", "Aadhaar"],
     "deadline": "30 September",
     "apply_link": "https://state.bihar.gov.in"
+  },
+
+  {
+    "scheme_name": "Post Matric Scholarship",
+    "occupation": "Student",
+    "income_limit": 250000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Financial support for students pursuing higher education",
+    "documents": ["Aadhaar", "Income Certificate", "Student ID"],
+    "deadline": "31 October",
+    "apply_link": "https://scholarships.gov.in"
+  },
+  {
+    "scheme_name": "Bihar Student Credit Card Scheme",
+    "occupation": "Student",
+    "income_limit": 800000,
+    "state": "Bihar",
+    "land_required": false,
+    "benefit": "Education loan up to ₹4 lakh for higher studies",
+    "documents": ["Aadhaar", "Admission Letter", "Income Certificate"],
+    "deadline": "Rolling",
+    "apply_link": "https://www.7nishchay-yuvaupmission.bihar.gov.in"
+  },
+  {
+    "scheme_name": "National Scholarship Portal",
+    "occupation": "Student",
+    "income_limit": 300000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Central government scholarships for students",
+    "documents": ["Aadhaar", "Student ID", "Income Certificate"],
+    "deadline": "30 November",
+    "apply_link": "https://scholarships.gov.in"
+  },
+
+  {
+    "scheme_name": "PM Mudra Yojana",
+    "occupation": "Entrepreneur",
+    "income_limit": 1000000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Business loans up to ₹10 lakh for small businesses",
+    "documents": ["Aadhaar", "Business Plan", "Bank Account"],
+    "deadline": "Rolling",
+    "apply_link": "https://www.mudra.org.in"
+  },
+  {
+    "scheme_name": "Startup India",
+    "occupation": "Entrepreneur",
+    "income_limit": 1000000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Tax benefits and funding support for startups",
+    "documents": ["Startup Registration", "PAN", "Business Plan"],
+    "deadline": "Rolling",
+    "apply_link": "https://www.startupindia.gov.in"
+  },
+  {
+    "scheme_name": "Stand Up India Scheme",
+    "occupation": "Entrepreneur",
+    "income_limit": 1000000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Bank loans for SC/ST and women entrepreneurs",
+    "documents": ["Aadhaar", "Business Proposal"],
+    "deadline": "Rolling",
+    "apply_link": "https://www.standupmitra.in"
+  },
+
+  {
+    "scheme_name": "Beti Bachao Beti Padhao",
+    "occupation": "Women",
+    "income_limit": 500000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Promotes education and welfare of girl children",
+    "documents": ["Birth Certificate", "Aadhaar"],
+    "deadline": "Rolling",
+    "apply_link": "https://wcd.nic.in"
+  },
+  {
+    "scheme_name": "Pradhan Mantri Matru Vandana Yojana",
+    "occupation": "Women",
+    "income_limit": 500000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Cash incentive for pregnant and lactating mothers",
+    "documents": ["Aadhaar", "Pregnancy Registration"],
+    "deadline": "Rolling",
+    "apply_link": "https://wcd.nic.in"
+  },
+
+  {
+    "scheme_name": "Ayushman Bharat",
+    "occupation": "Other",
+    "income_limit": 500000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Health insurance coverage up to ₹5 lakh per family",
+    "documents": ["Aadhaar", "Ration Card"],
+    "deadline": "Rolling",
+    "apply_link": "https://pmjay.gov.in"
+  },
+  {
+    "scheme_name": "PM Awas Yojana",
+    "occupation": "Other",
+    "income_limit": 600000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Affordable housing for low-income families",
+    "documents": ["Aadhaar", "Income Certificate"],
+    "deadline": "Rolling",
+    "apply_link": "https://pmaymis.gov.in"
+  },
+  {
+    "scheme_name": "Skill India Mission",
+    "occupation": "Other",
+    "income_limit": 1000000,
+    "state": "All",
+    "land_required": false,
+    "benefit": "Skill training programs for employment",
+    "documents": ["Aadhaar"],
+    "deadline": "Rolling",
+    "apply_link": "https://www.skillindia.gov.in"
   }
 ]
