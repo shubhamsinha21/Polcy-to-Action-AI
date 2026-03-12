@@ -12,7 +12,7 @@ from vector_search import search_schemes
 # ==========================
 
 st.set_page_config(
-    page_title="Policy-to-Action AI",
+    page_title="YojanaAI",
     page_icon="🚦",
     layout="wide"
 )
