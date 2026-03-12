@@ -13,126 +13,214 @@ from vector_search import search_schemes
 
 st.set_page_config(
     page_title="Policy-to-Action AI",
+    page_icon="🚦",
     layout="wide"
 )
 
-st.title("🚦 Policy-to-Action AI")
-st.subheader("AI-powered Government Scheme Advisor")
-
-
 # ==========================
-# USER PROFILE INPUT
+# CUSTOM THEME
 # ==========================
 
-st.header("Enter Your Details")
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #F8FAFC;
+    }
 
-occupation = st.selectbox(
-    "Occupation",
-    ["Farmer", "Student", "Entrepreneur", "Other"]
+    h1, h2, h3 {
+        color: #1E3A8A;
+    }
+
+    .scheme-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .apply-btn {
+        background-color: #10B981;
+        padding: 8px 14px;
+        border-radius: 6px;
+        color: white;
+        text-decoration: none;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
 )
 
-state = st.selectbox(
-    "State",
-    ["Bihar", "Uttar Pradesh", "Madhya Pradesh", "All"]
-)
-
-income = st.number_input(
-    "Annual Income (₹)",
-    min_value=0,
-    value=200000
-)
-
-land = st.checkbox("Do you own agricultural land?")
-
-
-user = {
-    "occupation": occupation,
-    "state": state,
-    "income": income,
-    "land_owned": land
-}
-
-
 # ==========================
-# SCHEME ELIGIBILITY CHECKER
+# SIDEBAR
 # ==========================
 
-st.header("Scheme Eligibility Checker")
+st.sidebar.title("🚦 YojanaAI")
 
-if st.button("🔎 Check Eligible Schemes"):
-    
-    schemes = check_eligibility(user)
+page = st.sidebar.radio(
+    "Navigation",
+    [
+        "🏠 Home",
+        "🔎 Scheme Advisor",
+        "🤖 AI Copilot",
+        "📚 Scheme Search"
+    ]
+)
 
-    if not schemes:
+# ==========================
+# HOME PAGE
+# ==========================
 
-        st.warning("No schemes found for this profile.")
+if page == "🏠 Home":
 
-    else:
+    st.title("🚦 YojanaAI")
 
-        ranked = rank_schemes(user, schemes)
+    st.markdown(
+        """
+AI-powered Government Scheme Advisor.**
 
-        st.header("Top Schemes For You")
+### Features
 
-        for scheme, score in ranked:
+✅ Eligibility-based scheme discovery  
+✅ AI explanation of scheme benefits  
+✅ AI policy assistant  
+✅ Semantic search of government programs
+"""
+    )
 
-            st.subheader(f"{scheme['scheme_name']} (Score: {score})")
+# ==========================
+# SCHEME ADVISOR
+# ==========================
 
-            st.write("Benefit:", scheme["benefit"])
+elif page == "🔎 Scheme Advisor":
 
-            st.write("Deadline:", scheme["deadline"])
+    st.title("🔎 Scheme Eligibility Advisor")
 
-            st.write("Apply Here:", scheme["apply_link"])
+    col1, col2 = st.columns(2)
 
-            st.write("Required Documents:")
+    with col1:
 
-            for doc in scheme["documents"]:
-                st.write(f"• {doc}")
+        occupation = st.selectbox(
+            "Occupation",
+            ["Farmer", "Student", "Entrepreneur", "Other"]
+        )
 
-            explanation = explain_eligibility(user, scheme)
+        state = st.selectbox(
+            "State",
+            ["Bihar", "Uttar Pradesh", "Madhya Pradesh", "All"]
+        )
 
-            st.write("AI Explanation:")
-            st.write(explanation)
+    with col2:
 
-            st.divider()
+        income = st.number_input(
+            "Annual Income (₹)",
+            min_value=0,
+            value=200000
+        )
 
+        land = st.checkbox("Own agricultural land")
+
+    user = {
+        "occupation": occupation,
+        "state": state,
+        "income": income,
+        "land_owned": land
+    }
+
+    if st.button("🔎 Check Eligible Schemes"):
+
+        schemes = check_eligibility(user)
+
+        if not schemes:
+
+            st.warning("No schemes found for this profile.")
+
+        else:
+
+            ranked = rank_schemes(user, schemes)
+
+            st.subheader("Top Schemes For You")
+
+            for scheme, score in ranked:
+
+                st.markdown(
+                    f"""
+                    <div class="scheme-card">
+                    <h3>{scheme['scheme_name']}</h3>
+
+                    <b>Benefit:</b> {scheme['benefit']} <br>
+                    <b>Deadline:</b> {scheme['deadline']} <br>
+                    <b>Score:</b> {score} <br><br>
+
+                    <b>Documents Required:</b>
+                    <ul>
+                    {''.join([f"<li>{doc}</li>" for doc in scheme['documents']])}
+                    </ul>
+
+                    <a href="{scheme['apply_link']}" target="_blank" class="apply-btn">
+                    Apply Here
+                    </a>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+                explanation = explain_eligibility(user, scheme)
+
+                st.info(explanation)
 
 # ==========================
 # AI POLICY COPILOT
 # ==========================
 
-st.header("🤖 AI Policy Copilot")
+elif page == "🤖 AI Copilot":
 
-st.write("Ask questions about government schemes.")
+    st.title("🤖 AI Policy Copilot")
 
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+    st.write("Ask questions about government schemes and policies.")
 
-user_message = st.text_input("Ask something:")
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
 
-if st.button("Send"):
+    user_message = st.text_input("Ask your question")
 
-    response = run_policy_chat(user_message)
+    if st.button("Send"):
 
-    st.session_state.chat_history.append(("You", user_message))
-    st.session_state.chat_history.append(("AI", response))
+        response = run_policy_chat(user_message)
 
-for role, msg in st.session_state.chat_history:
+        st.session_state.chat_history.append(("user", user_message))
+        st.session_state.chat_history.append(("assistant", response))
 
-    if role == "You":
-        st.chat_message("user").write(msg)
-    else:
-        st.chat_message("assistant").write(msg)
-        
-        
-st.header("🔎 Search Government Schemes")
+    for role, msg in st.session_state.chat_history:
 
-query = st.text_input("Search schemes")
+        if role == "user":
+            st.chat_message("user").write(msg)
+        else:
+            st.chat_message("assistant").write(msg)
 
-if st.button("Search"):
+# ==========================
+# SCHEME SEARCH
+# ==========================
 
-    results = search_schemes(query)
+elif page == "📚 Scheme Search":
 
-    for r in results:
+    st.title("📚 Search Government Schemes")
 
-        st.subheader(r["scheme_name"])
-        st.write(r["benefit"])
+    query = st.text_input("Search schemes")
+
+    if st.button("Search"):
+
+        results = search_schemes(query)
+
+        for r in results:
+
+            st.markdown(
+                f"""
+                <div class="scheme-card">
+                <h3>{r['scheme_name']}</h3>
+                <p>{r['benefit']}</p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
